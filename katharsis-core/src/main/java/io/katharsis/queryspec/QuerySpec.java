@@ -1,10 +1,6 @@
 package io.katharsis.queryspec;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import io.katharsis.core.internal.utils.CompareUtils;
@@ -162,7 +158,11 @@ public class QuerySpec {
 	}
 
 	public void addFilter(FilterSpec filterSpec) {
-		this.filters.add(filterSpec);
+		int index = Collections.binarySearch(this.filters, filterSpec,Comparator.comparing(FilterSpec::toString));
+		if (index < 0) {
+			index = -index - 1;
+		}
+		this.filters.add(index, filterSpec);
 	}
 
 	public void addSort(SortSpec sortSpec) {
@@ -174,7 +174,11 @@ public class QuerySpec {
 	}
 
 	public void includeRelation(List<String> attrPath) {
-		this.includedRelations.add(new IncludeRelationSpec(attrPath));
+		int index = Collections.binarySearch(includedRelations, new IncludeRelationSpec(attrPath),Comparator.comparing(IncludeRelationSpec::toString));
+		if (index < 0) {
+			index = -index - 1;
+		}
+		includedRelations.add(index, new IncludeRelationSpec(attrPath));
 	}
 
 	/**
